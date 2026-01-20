@@ -1,13 +1,11 @@
 {
     "id": "io.github.cosmic_utils.Examine",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "24.08",
-    "base": "com.system76.Cosmic.BaseApp",
-    "base-version": "stable",
+    "runtime-version": "25.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.rust-stable",
-        "org.freedesktop.Sdk.Extension.llvm18"
+        "org.freedesktop.Sdk.Extension.llvm21"
     ],
     "command": "examine",
     "finish-args": [
@@ -19,7 +17,7 @@
         "--filesystem=xdg-config/cosmic:ro"
     ],
     "build-options": {
-        "append-path": "/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm18/bin",
+        "append-path": "/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/llvm21/bin",
         "env": {
             "CARGO_HOME": "/run/build/examine/cargo",
             "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER": "clang",
@@ -29,9 +27,38 @@
         }
     },
     "modules": [
-        "shared-modules/libusb/libusb.json",
+        {
+            "name": "just",
+            "buildsystem": "simple",
+            "build-commands": [
+                "install -Dm0755 just /app/bin/just"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "strip-components": 0,
+                    "dest-filename": "just.tar.gz",
+                    "url": "https://github.com/casey/just/releases/download/1.46.0/just-1.46.0-x86_64-unknown-linux-musl.tar.gz",
+                    "sha256": "79966e6e353f535ee7d1c6221641bcc8e3381c55b0d0a6dc6e54b34f9db36eaa",
+                    "only_arches": [
+                        "x86_64"
+                    ]
+                },
+                {
+                    "type": "archive",
+                    "strip-components": 0,
+                    "dest-filename": "just.tar.gz",
+                    "url": "https://github.com/casey/just/releases/download/1.46.0/just-1.46.0-aarch64-unknown-linux-musl.tar.gz",
+                    "sha256": "b81970c8247fa64cfb30d2a3da0e487e4253f9f2d01865ed5e7d53cdc7b02188",
+                    "only_arches": [
+                        "aarch64"
+                    ]
+                }
+            ]
+        },
         {
             "name": "usbutils",
+            "buildsystem": "meson",
             "config-opts": [
                 "--datadir=/app/share/hwdata",
                 "--sbindir=/app/bin"
@@ -50,6 +77,31 @@
             ]
         },
         {
+            "name": "pop-icon-theme",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/pop-os/icon-theme/archive/refs/tags/v3.5.1.tar.gz",
+                    "sha256": "92e73f252e5e9c8a1124623a7d421410ef43c798a4a992955e6eb4f666f5c8a0"
+                }
+            ]
+        },
+        {
+            "name": "cosmic-icons",
+            "buildsystem": "simple",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/pop-os/cosmic-icons.git",
+                    "commit": "cd30ffd509bb6b289ac5d8ae26e2e30341e9b8cb"
+                }
+            ],
+            "build-commands": [
+                "just prefix=/app install"
+            ]
+        },
+        {
             "name": "examine",
             "buildsystem": "simple",
             "build-commands": [
@@ -58,10 +110,9 @@
             ],
             "sources": [
                 {
-                    "type": "git",
-                    "url": "https://github.com/cosmic-utils/examine.git",
-                    "tag": "1.0.0",
-                    "commit": "a34c1b9fc2f4b6b4e7b5430c1b7b3039b8e6cd27"
+                    "type": "archive",
+                    "url": "https://github.com/cosmic-utils/examine/archive/refs/tags/2.0.0.tar.gz",
+                    "sha256": "3347afcfeb810c01658c322086628af1708da066abc3fd0ee8f24347500c03db"
                 },
                 "cargo-sources.json"
             ]
