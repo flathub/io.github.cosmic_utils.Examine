@@ -67,8 +67,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/gregkh/usbutils.git",
-                    "tag": "v019",
-                    "commit": "d0c76b601b4b3ab9b2ab2647d604a8e3cce6d666",
+                    "tag": "v020",
+                    "commit": "ed4a892fecd9991e71cfd92a2205336f8c02a73a",
                     "x-checker-data": {
                         "type": "git",
                         "tag-pattern": "^v([\\d.]+)$"
